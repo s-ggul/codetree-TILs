@@ -163,7 +163,7 @@ public class Main {
 			int nx = tagger.x + dxy[curD][0] * i;
 			int ny = tagger.y + dxy[curD][1] * i;
 			
-			if(nx < 0 || ny < 0 || nx >= N || ny >= N) break;
+			if(nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
 			
 			for(int j = 0; j < M; j++) { // 도망자 위치 체크
 				if(thieves[j].d == -1) continue;
