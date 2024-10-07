@@ -204,6 +204,8 @@ public class Main{
 		}
 		
 		// 머리 꼬리 바꾸기
+		team.get(0).num = 3;
+		team.get(team.size()-1).num = 1;
 		Collections.reverse(team);
 	}
 }
