@@ -97,7 +97,7 @@ public class Main{
 	// ArrayList 앞 원소의 좌표를 가져오면됨.
 	static void moveTeams() {		
 		Set<Integer> keys = teams.keySet();
-		for(Integer key: keys) {
+		for(Integer key: keys) { // key = teamNum
 			ArrayList<Pair> team = teams.get(key);
 
 			for(int n = team.size() - 1; n >= 0; n--) {
@@ -109,7 +109,7 @@ public class Main{
 
 						if(nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
 
-						if(board[nx][ny] == 4) {
+						if(marking[nx][ny] == key) {
 							board[nx][ny] = 1;
 							pair.x = nx;
 							pair.y = ny;
