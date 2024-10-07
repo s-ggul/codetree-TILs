@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+//여기서 sort를 해줘도 안됨. 그냥 1부터 순서대로가져와야함. 즉, 2인 녀석들을 어떻게 차례대로 순서대로 배열에 담는가도 중요 -> 무시하기 쉬움.
+
 class Pair implements Comparable<Pair>{
 	int x;
 	int y;
@@ -28,6 +30,7 @@ public class Main{
 	static int N, M, K, answer;
 	static int[][] board, marking;
 	static boolean[][] visited;
+	static boolean[][] teamVisited;
 	static int[][] dxy = {{-1,0},{1,0},{0,-1},{0,1}};
 	static HashMap<Integer, ArrayList<Pair>> teams;
 	public static void main(String[] args) throws IOException {
@@ -52,13 +55,16 @@ public class Main{
 		// 각 팀 별 마킹
 		marking = new int[N][N];
 		visited = new boolean[N][N];
-		int teamNum = 0;
+		teamVisited = new boolean[N][N];
+		int teamNum = 5;
 		for(int i = 0; i < N; i++) {
 			for(int j = 0; j < N; j++) {
 				if(board[i][j]!=0 && !visited[i][j]) {
 					teamNum++;
 					markTeams(i, j, teamNum);
 				}
+				
+				if(board[i][j] == 1 && !teamVisited[i][j]) saveTeam(i,j,teamNum);
 			}
 		}
 
@@ -76,22 +82,33 @@ public class Main{
 	static void markTeams(int x, int y, int teamNum) {
 		if(x < 0 || y < 0 || x >= N || y >= N || visited[x][y]) return;
 
-		visited[x][y] = true;
-
 		if(board[x][y] == 0) return;
-		if(board[x][y] != 4) { // 각 번호별 팀 정보를 저장
-			Pair p = new Pair(x, y, board[x][y]);
-			ArrayList<Pair> temp = teams.getOrDefault(teamNum, new ArrayList<Pair>());
-			temp.add(p);
-			Collections.sort(temp);
-			teams.put(teamNum, temp);	
-		}
-
+		
+		visited[x][y] = true;
 		marking[x][y] = teamNum;
 
 		for(int d = 0; d < 4; d++) {
 			markTeams(x+dxy[d][0], y+dxy[d][1], teamNum);
 		}
+	}
+	
+	static void saveTeam(int x, int y, int teamNum) {
+		if(x < 0 || y < 0 || x >= N || y >= N || teamVisited[x][y]) return;
+		if(board[x][y] == 0 || board[x][y] >= 4) return;
+		
+		teamVisited[x][y] = true;
+		
+		Pair p = new Pair(x, y, board[x][y]);
+		ArrayList<Pair> temp = teams.getOrDefault(teamNum, new ArrayList<Pair>());
+		temp.add(p);
+		
+		teams.put(teamNum, temp);	
+		marking[x][y] = teamNum;
+		
+		for(int d = 0; d < 4; d++) {
+			saveTeam(x+dxy[d][0], y+dxy[d][1], teamNum);
+		}
+		
 	}
 
 	// ArrayList 앞 원소의 좌표를 가져오면됨.
@@ -109,12 +126,12 @@ public class Main{
 
 						if(nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
 
-						if(marking[nx][ny] == key) {
+						if(board[nx][ny] == 4 && marking[nx][ny] == key) {
 							board[nx][ny] = 1;
 							pair.x = nx;
 							pair.y = ny;
+							break;
 						}
-
 					}
 				}else {
 					Pair prePair = team.get(n-1);
@@ -153,10 +170,9 @@ public class Main{
 
 		}
 		else if(t <= N*2) {
-			t = (t/2) - 1;
-			for(int i = N-1; i > 0; i--) {
+			t = (t % N) - 1;
+			for(int i = N-1; i >= 0; i--) {
 				int n = board[i][t];
-
 				if(n != 0 && n != 4) { // 점수 얻는 경우
 					teamNum = marking[i][t];
 					targetX = i;
@@ -166,8 +182,8 @@ public class Main{
 			}
 		}
 		else if(t <= N*3) {
-			t = (t/3) - 1;
-			for(int j = N-1; j > 0; j--) {
+			t = N-(t % N);
+			for(int j = N-1; j >= 0; j--) {
 				int n = board[((N-1)-t)][j];
 
 				if(n != 0 && n != 4) { // 점수 얻는 경우
@@ -179,7 +195,7 @@ public class Main{
 			}
 		}
 		else if(t <= N*4) {
-			t = (t/4) - 1;
+			t = N-(t % N);
 			for(int i = 0; i < N; i++) {
 				int n = board[i][(N-1)-t];
 
