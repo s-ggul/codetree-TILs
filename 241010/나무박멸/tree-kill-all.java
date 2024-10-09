@@ -171,7 +171,7 @@ public class Main {
 				ny += dxy2[d][1];
 				
 				if(nx < 0 || ny < 0 || nx >= N || ny >= N ) break;
-				if(board[nx][ny] == -1) break;
+				if(board[nx][ny] == -1 || board[nx][ny] == 0) break;
 				
 				cnt += board[nx][ny];
 			}
