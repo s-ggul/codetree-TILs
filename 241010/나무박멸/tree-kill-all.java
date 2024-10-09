@@ -149,14 +149,14 @@ public class Main {
 				}
 				else if(cnt == maxNum) {
 					if(maxNumTree.x == tree.x) {
-						maxNumTree = maxNumTree.y < tree.y ? maxNumTree : tree;
+						maxNumTree = maxNumTree.y <= tree.y ? maxNumTree : tree;
 					}
-					else maxNumTree = maxNumTree.x < tree.x ? maxNumTree : tree;
+					else maxNumTree = maxNumTree.x <= tree.x ? maxNumTree : tree;
 				}
 			}
 		}
 		
-		removeTree(maxNumTree.x, maxNumTree.y);
+		if(maxNumTree != null) removeTree(maxNumTree.x, maxNumTree.y);
 	}
 	
 	static int countRemovableTree(int x, int y) { 
