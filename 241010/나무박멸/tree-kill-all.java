@@ -60,7 +60,7 @@ public class Main {
 			
 			growTree(); // 나무 성장
 			widenTree(); // 나무 확장
-			searchRemoveTree();		
+			searchRemoveTree();
 		}
 	}
 	
@@ -164,9 +164,11 @@ public class Main {
 		int cnt = board[x][y];
 		
 		for(int d = 0; d < 4; d++) {
+			int nx = x;
+			int ny = y;
 			for(int i = 0; i < K; i++) {
-				int nx = x + dxy2[d][0];
-				int ny = y + dxy2[d][1];
+				nx += dxy2[d][0];
+				ny += dxy2[d][1];
 				
 				if(nx < 0 || ny < 0 || nx >= N || ny >= N ) break;
 				if(board[nx][ny] == -1) break;
