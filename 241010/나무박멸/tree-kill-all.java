@@ -60,8 +60,7 @@ public class Main {
 			
 			growTree(); // 나무 성장
 			widenTree(); // 나무 확장
-			searchRemoveTree();
-			 // 제초제 1년마다 감소
+			searchRemoveTree();		
 		}
 	}
 	
@@ -95,11 +94,13 @@ public class Main {
 		// 나무 주변 빈칸(나무 없고, 장애물 없고, 제초제 없는)
 		// 만일 두 나무에서 한곳에 확장을 동시에 한다면 더해줌
 		for(int i = 0; i < trees.size(); i++) {
+			
 			if(spaceCount.get(i) == 0) continue;
 			
-			TreeGroup tree = trees.get(i);			
+			
+			TreeGroup tree = trees.get(i);	
 			int childTreeNum = tree.treeNum / spaceCount.get(i);  
-					
+			
 			for(int d = 0; d < 4; d++) {
 				int nx = tree.x + dxy[d][0];
 				int ny = tree.y + dxy[d][1];
@@ -193,7 +194,10 @@ public class Main {
 				ny += dxy2[d][1];
 				
 				if(nx < 0 || ny < 0 || nx >= N || ny >= N ) break;
-				if(board[nx][ny] == -1) break;
+				if(board[nx][ny] == -1 || board[nx][ny] == 0) {
+					jecho[nx][ny] = C;
+					break;
+				}
 				
 				numOfRemovedTree += board[nx][ny];
 				board[nx][ny] = 0;
