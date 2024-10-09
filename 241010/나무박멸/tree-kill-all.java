@@ -61,7 +61,7 @@ public class Main {
 			growTree(); // 나무 성장
 			widenTree(); // 나무 확장
 			searchRemoveTree();
-			discountJecho(); // 제초제 1년마다 감소
+			 // 제초제 1년마다 감소
 		}
 	}
 	
@@ -149,9 +149,9 @@ public class Main {
 				}
 				else if(cnt == maxNum) {
 					if(maxNumTree.x == tree.x) {
-						maxNumTree = maxNumTree.y <= tree.y ? maxNumTree : tree;
+						maxNumTree = maxNumTree.y < tree.y ? maxNumTree : tree;
 					}
-					else maxNumTree = maxNumTree.x <= tree.x ? maxNumTree : tree;
+					else maxNumTree = maxNumTree.x < tree.x ? maxNumTree : tree;
 				}
 			}
 		}
@@ -167,7 +167,8 @@ public class Main {
 				int nx = x + dxy2[d][0];
 				int ny = y + dxy2[d][1];
 				
-				if(nx < 0 || ny < 0 || nx >= N || ny >= N) break;
+				if(nx < 0 || ny < 0 || nx >= N || ny >= N ) break;
+				if(board[nx][ny] == -1) break;
 				
 				cnt += board[nx][ny];
 			}
@@ -177,10 +178,12 @@ public class Main {
 	}
 	
 	static void removeTree(int x, int y) { 
+		discountJecho();
+		
 		int numOfRemovedTree = board[x][y];
 		board[x][y] = 0;
 		removeTreeFromTrees(x,y);
-		jecho[x][y] = C + 1;
+		jecho[x][y] = C;
 		
 		for(int d = 0; d < 4; d++) {
 			int nx = x;
@@ -189,11 +192,12 @@ public class Main {
 				nx += dxy2[d][0];
 				ny += dxy2[d][1];
 				
-				if(nx < 0 || ny < 0 || nx >= N || ny >= N || board[nx][ny] == -1) break;
+				if(nx < 0 || ny < 0 || nx >= N || ny >= N ) break;
+				if(board[nx][ny] == -1) break;
 				
 				numOfRemovedTree += board[nx][ny];
 				board[nx][ny] = 0;
-				jecho[nx][ny] = C + 1;
+				jecho[nx][ny] = C;
 				removeTreeFromTrees(nx, ny);
 			}
 		}
